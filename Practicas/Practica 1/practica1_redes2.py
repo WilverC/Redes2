@@ -1,5 +1,6 @@
 import re
 import threading as th
+import math as m
 
 def contarPalabra(lista_archivos, contador, numero_archivo, palabras_buscadas):
     palabras_a = 0
@@ -33,14 +34,23 @@ def contarPalabra(lista_archivos, contador, numero_archivo, palabras_buscadas):
     pass
 
 num_hilos = 3
+num_libros = 30
+div = m.floor(num_libros/num_hilos)
+mod = num num_libros%num_hilos
 archivos = ["Archivo 1","Archivo 2", "Archivo 3"]
 palabras = ["Palabra1", "Palabra 2", "Palabra 3"]
 hilos = list()
 
-for i range(num_hilos):
-    t = t1 = th.Thread(name = ("Hilo ", i), target = contarPalabra, args=(archivos,c,num,palabras))
-    hilos.append(t)
-    t.start()
+if(mod == 0):
+    for i range(num_hilos):
+        t = t1 = th.Thread(name = ("Hilo ", i), target = contarPalabra, args=(archivos,c,num,palabras))
+        hilos.append(t)
+        t.start()
+else:
+    for i range(num_hilos):
+        t = t1 = th.Thread(name = ("Hilo ", i), target = contarPalabra, args=(archivos,c,num,palabras))
+        hilos.append(t)
+        t.start()
 
 for t in hilos:
     t.join()
