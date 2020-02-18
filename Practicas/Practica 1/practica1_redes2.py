@@ -35,36 +35,55 @@ def contarPalabra(lista_archivos, contador,numero_archivo,palabras_buscadas):
 
 num_hilos = 3
 num_libros = 30
+#division y residuo de libros vs hilos
 div = m.floor(num_libros/num_hilos)
 mod = num_libros % num_hilos
+
+#lista de archivos y palabras 
 archivos = ["Archivo 1","Archivo 2", "Archivo 3"]
 palabras = ["Palabra1", "Palabra 2", "Palabra 3"]
+
+# variable de reparticion de libros
+ini = [0]
+fin = list()
+inifin = list()
+
+#lista de hilos
 hilos = list()
+
 aux = 0
 aux2 = 0
 c = 0
-if(mod == 0):
-    for i in range(num_hilos):
+
+#creacion de inicios
+for i in range(num_hilos):
+    if mod != 0:
         aux = aux2
-        aux2 += div
-        t = t1 = th.Thread(name = ("Hilo " + str(i)), target = contarPalabra, args=(archivos[aux:aux2],c,div,palabras))
+        aux2 = aux2 + div + 1
+        t = t1 = th.Thread(name = ("Hilo " + str(i)), target = contarPalabra, args=(archivos[aux:aux2],inifin,div,palabras))
         hilos.append(t)
         t.start()
-else:
-    for i in range(num_hilos):
-        if i != (num_hilos-1):
-            aux = aux2
-            aux2 += div
-            t = t1 = th.Thread(name = ("Hilo ", i), target = contarPalabra, args=(archivos[aux:aux2],c,div,palabras))
-            hilos.append(t)
-            t.start()
-        else:
-            aux = aux2
-            aux2 += div
-            t = t1 = th.Thread(name = ("Hilo ", i), target = contarPalabra, args=(archivos[aux:num_libros],c,div,palabras))
-            hilos.append(t)
-            t.start()
-
+        mod = mod - 1
+    else:
+        ini.append(ini[i] + div)
 
 for t in hilos:
     t.join()
+    
+#creacion de finales
+#for i in range(num_hilos-1):
+#    fin.append(ini[i+1])
+
+#fin.append(num_libros)
+
+#union de inicio y final
+for i in range(num_hilos):
+    inifin.append([ini[i], fin[i]])
+
+print(inifin)
+
+#creacion de los hilos
+"""
+
+
+"""
