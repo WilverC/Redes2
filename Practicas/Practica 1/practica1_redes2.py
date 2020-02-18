@@ -2,88 +2,134 @@ import re
 import threading as th
 import math as m
 
-def contarPalabra(lista_archivos, contador,numero_archivo,palabras_buscadas):
-    palabras_a = 0
-    palabras_b = 0
-    palabras_c = 0
-    palabras_d = 0
-    palabras_e = 0
-    
-    for i in range(numero_archivo):
-        nombre_archivo = numero_archivo[i] 
-        archivo = open(nombre_archivo,"w")
-        lineas = archivo.readlines()
-        for ev in lineas: #Cuenta el numero de palabras totales y particulares
-            palabra = re.findall("([a-z\']+)", ev.strip(), re.I)
-            if palabra:
-                contador += len(palabra)
-            if palabra == "Palabra a":
-                palabras_a += 1
-            if palabra == "Palabra b":
-                palabras_b += 1
-            if palabra == "Palabra c":
-                palabras_c += 1
-            if palabra == "Palabra d":
-                palabras_d += 1
-            if palabra == "Palabra e":
-                palabras_e += 1
+#variable global
+datos_totales = list()
 
-        if contador > 1:
-            print("El archivo tene "+ contador + " palabras")
+#funcion concurrente de conteo de palabras
+def contarPalabra(lista_archivos): 
+    temp = list()
+
+    for libro in lista_archivos:    
+        archivo = open(libro,"r", encoding="utf8")
+        lineas = archivo.read()
+        palabras = lineas.split()
+        alegria = 0
+        amor = 0
+        enojo = 0
+        ira = 0
+        sueño = 0
+        aburrimiento = 0
+        contador = 0
+        for ev in palabras: #Cuenta el numero de palabras totales y particulares
+            ev.strip('\'\':;,.-*\"\"¿?¡!()').lower()
+            contador += 1
+            if ev == "alegria":
+                alegria += 1
+            if ev == "amor":
+                amor += 1
+            if ev == "enojo":
+                enojo += 1
+            if ev == "sueño":
+                sueño += 1
+            if ev == "ira":
+                ira += 1
+            if ev == "aburrimiento":
+                aburrimiento += 1
+
+        temp = [alegria, amor, enojo, ira, sueño, aburrimiento, contador]
+        temp.append(libro)
+        global datos_totales
+        datos_totales.append(temp)
         archivo.close()
+    
     pass
 
-num_hilos = 3
-num_libros = 30
+
+#Comienza el programa
+
+#lista de archivos y palabras 
+archivos = ["Cuentos\Cuento_1.txt","Cuentos\Cuento_2.txt", "Cuentos\Cuento_3.txt", "Cuentos\Cuento_4.txt","Cuentos\Cuento_5.txt"]
+palabras = list()
+
+#llamada a consola para numero de hilos
+num_libros = len(archivos)
+while 1:
+    num_hilos = int(input("Introduce la cantidad de hilos: "))
+    if(num_hilos <= num_libros):
+        break
+    else:
+        print("No es necesario tantos hilos, se recomienda: ",num_libros)
+
 #division y residuo de libros vs hilos
 div = m.floor(num_libros/num_hilos)
 mod = num_libros % num_hilos
 
-#lista de archivos y palabras 
-archivos = ["Archivo 1","Archivo 2", "Archivo 3"]
-palabras = ["Palabra1", "Palabra 2", "Palabra 3"]
-
-# variable de reparticion de libros
-ini = [0]
-fin = list()
-inifin = list()
-
 #lista de hilos
 hilos = list()
 
+#creacion de los hilos
 aux = 0
 aux2 = 0
-c = 0
-
-#creacion de inicios
 for i in range(num_hilos):
-    if mod != 0:
+    if(mod != 0):
         aux = aux2
         aux2 = aux2 + div + 1
-        t = t1 = th.Thread(name = ("Hilo " + str(i)), target = contarPalabra, args=(archivos[aux:aux2],inifin,div,palabras))
+        t = th.Thread(name = ("Hilo " + str(i)), target = contarPalabra, args=(archivos[aux:aux2],))
         hilos.append(t)
-        t.start()
         mod = mod - 1
     else:
-        ini.append(ini[i] + div)
+        aux = aux2
+        aux2 = aux2 + div
+        t = th.Thread(name = ("Hilo " + str(i)), target = contarPalabra, args=(archivos[aux:aux2],))
+        hilos.append(t)
+
+
+for t in hilos:
+    t.start()
 
 for t in hilos:
     t.join()
+
+print(datos_totales)
+
+#variables para el promedio de todos
+alegria = 0
+amor = 0
+enojo = 0
+ira = 0
+sueño = 0
+aburrimiento = 0
+contador = 0
+
+#Muestreo de datos
+for dato in datos_totales:
+    print("---------------------------------------")
+    print("Nombre: ", dato[7])
+    print("Alegria: ", dato[0])
+    print("Amor: ", dato[1])
+    print("Enojo: ", dato[2])
+    print("Ira: ", dato[3])
+    print("Sueño: ", dato[4])
+    print("Aburrimiento: ", dato[5])
+    print("Total de palabras: ", dato[6])
+
+#suma da las palabras
+for dato in datos_totales:
+    alegria = alegria + dato[0]
+    amor = amor + dato[1]
+    enojo = enojo + dato[2]
+    ira = ira + dato[3]
+    sueño = sueño + dato[4]
+    aburrimiento = aburrimiento + dato[5]
+    contador = contador + dato[6]
     
-#creacion de finales
-#for i in range(num_hilos-1):
-#    fin.append(ini[i+1])
-
-#fin.append(num_libros)
-
-#union de inicio y final
-for i in range(num_hilos):
-    inifin.append([ini[i], fin[i]])
-
-print(inifin)
-
-#creacion de los hilos
-"""
-
-
-"""
+#muestreo del promedio
+print("*********************************")
+print("Promedio de palabras")
+print("Alegria: ", alegria/num_libros)
+print("Amor: ", amor/num_libros)
+print("Enojo: ", enojo/num_libros)
+print("Ira: ", ira/num_libros)
+print("Sueño: ", sueño/num_libros)
+print("Aburrimiento: ", aburrimiento/num_libros)
+print("Total de palabras: ", contador/num_libros)
