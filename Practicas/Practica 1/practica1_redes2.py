@@ -48,7 +48,33 @@ def contarPalabra(lista_archivos):
 #Comienza el programa
 
 #lista de archivos y palabras 
-archivos = ["Cuentos\Cuento_1.txt","Cuentos\Cuento_2.txt", "Cuentos\Cuento_3.txt", "Cuentos\Cuento_4.txt","Cuentos\Cuento_5.txt"]
+archivos = ["Cuentos\Cuento_1.txt",
+            "Cuentos\Cuento_2.txt", 
+            "Cuentos\Cuento_3.txt", 
+            "Cuentos\Cuento_4.txt",
+            "Cuentos\Cuento_5.txt",
+            "Cuentos\Cuento_6.txt",
+            "Cuentos\Cuento_7.txt",
+            "Cuentos\Cuento_8.txt",
+            "Cuentos\Cuento_9.txt",
+            "Cuentos\Cuento_10.txt",
+            "Cuentos\Cuento_11.txt",
+            "Cuentos\Cuento_12.txt",
+            "Cuentos\Cuento_13.txt",
+            "Cuentos\Cuento_14.txt",
+            "Cuentos\Cuento_15.txt",
+            "Cuentos\Cuento_16.txt",
+            "Cuentos\Cuento_17.txt",
+            "Cuentos\Cuento_18.txt",
+            "Cuentos\Cuento_19.txt",
+            "Cuentos\Cuento_20.txt",
+            "Cuentos\Cuento_21.txt",
+            "Cuentos\Cuento_22.txt",
+            "Cuentos\Cuento_23.txt",
+            "Cuentos\Cuento_24.txt",
+            "Cuentos\Cuento_25.txt",
+            "Cuentos\Cuento_.txt"]
+
 palabras = list()
 
 #llamada a consola para numero de hilos
