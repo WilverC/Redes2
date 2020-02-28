@@ -1,27 +1,32 @@
 import re
 import threading as th
 import math as m
+
+#variables globales
+
 sem1 = th.Semaphore(1)
 sem2 = th.Semaphore(0)
 letras = ['\0','\0','\0','\0']
 numeros = ['\0','\0','\0','\0']
+ecritura = ["A","B","C","D"]
 
 # Funciones para los hilos
+
 def productor(id):
-    sem1.acquire()
-    print("Hola soy el hilo productor", id)
     for i in range(3):
-        print("Hola soy el hilo productor", id," ", str(i))
-    sem2.release()
+        sem1.acquire()
+        print("Hola soy el hilo productor", id," ", global escritura[i])
+        sem2.release()
+    
     pass
 
 
 def consumidor(id):
-    sem2.acquire()
-    print("Hola soy el hilo consumidor", id)
     for i in range(3):
+        sem2.acquire()
         print("Hola soy el hilo consumidor", id," ", str(i))
-    sem1.release()
+        sem1.release()
+    
     pass
 
 hilosC = []
